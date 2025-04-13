@@ -12,9 +12,7 @@ function Home() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token) {
-      console.log(token);
       fetch("http://localhost:5000/api/authorize", {
         mode: "cors",
         headers: {
@@ -58,6 +56,7 @@ function Home() {
       .catch((err) => {
         setPending(false);
         setError(true);
+        throw new Error(err);
       });
   }
 

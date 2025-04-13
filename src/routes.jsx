@@ -1,7 +1,7 @@
 import App from "./App";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
-// import Post from "./components/Post/Post";
 import Home from "./components/Home/Home";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 const routes = [
   {
@@ -10,8 +10,7 @@ const routes = [
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
-      // { path: "comments", element: <Comments /> },
-      // { path: "posts", element: <Posts /> },
+      { path: "dashboard", element: <Dashboard /> },
     ],
   },
 ];
