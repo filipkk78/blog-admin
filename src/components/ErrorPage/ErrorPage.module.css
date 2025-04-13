@@ -1,0 +1,25 @@
+.wrapper {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.main {
+  padding-block: 2em;
+  padding-left: clamp(1em, 16em, 3em);
+  padding-right: clamp(1em, 16em, 3em);
+  flex-direction: column;
+  background-color: #1e1e2f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

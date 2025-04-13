@@ -1,0 +1,14 @@
+.form {
+  display: grid;
+  gap: 0.5em;
+}
+
+.form textarea {
+  resize: none;
+}
+
+.form input,
+.form button {
+  border: 2px solid white;
+  background-color: rgb(33, 33, 33);
+}
