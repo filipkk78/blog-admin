@@ -1,12 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Home.module.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(false);
+  const [isTokenValid, setIsTokenValid] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      console.log(token);
+      fetch("http://localhost:5000/api/authorize", {
+        mode: "cors",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((response) => {
+        if (response.status >= 400) {
+          setError(true);
+          throw new Error("Access denied");
+        }
+        console.log("Access granted");
+        setIsTokenValid(true);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isTokenValid) {
+      navigate("/dashboard");
+    }
+  });
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -24,6 +53,7 @@ function Home() {
         setPending(false);
         setUsername("");
         setPassword("");
+        navigate("/dashboard");
       })
       .catch((err) => {
         setPending(false);
