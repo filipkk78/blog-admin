@@ -16,7 +16,8 @@ td {
   padding: 0.5em;
 }
 
-.publishBtn {
+.publishBtn,
+.deleteBtn {
   background-color: transparent;
   border: none;
   width: 100%;
@@ -52,4 +53,16 @@ td {
 
 .unpublished {
   stroke: red;
+}
+
+.deleteBtn svg {
+  transition: stroke 300ms ease-in;
+}
+
+.deleteBtn svg:hover {
+  stroke: rgb(255, 0, 0);
+}
+
+.deleteBtn svg:active {
+  stroke: rgb(74, 14, 14);
 }
