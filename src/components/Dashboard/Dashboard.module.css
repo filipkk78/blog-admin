@@ -59,9 +59,7 @@ tr:last-of-type {
 .published,
 .unpublished {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
 .published {
@@ -82,4 +80,32 @@ tr:last-of-type {
 
 .deleteBtn svg:active {
   stroke: rgb(74, 14, 14);
+}
+
+@media (max-width: 650px) {
+  th {
+    display: none;
+  }
+  td {
+    display: block;
+  }
+  td::before {
+    content: attr(data-cell) ": ";
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  .iconCell {
+    display: flex;
+    align-items: center;
+  }
+  .published,
+  .unpublished,
+  .deleteBtn,
+  .publishBtn {
+    justify-content: flex-start;
+  }
+  .published,
+  .unpublished {
+    margin-left: 1em;
+  }
 }

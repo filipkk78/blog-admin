@@ -121,13 +121,13 @@ function Dashboard() {
             <tbody>
               {posts.map((post) => (
                 <tr key={post.id} className={styles.post}>
-                  <td>{post.id}</td>
-                  <td>{post.title}</td>
-                  <td>
+                  <td data-cell="Id">{post.id}</td>
+                  <td data-cell="Title">{post.title}</td>
+                  <td data-cell="Published" className={styles.iconCell}>
                     {post.published && <Check className={styles.published} />}
                     {!post.published && <X className={styles.unpublished} />}
                   </td>
-                  <td>
+                  <td data-cell="Change status" className={styles.iconCell}>
                     <button
                       className={styles.publishBtn}
                       onClick={() => publishToggle(post.id)}
@@ -153,11 +153,11 @@ function Dashboard() {
             <tbody>
               {comments.map((comment) => (
                 <tr key={comment.id} className={styles.post}>
-                  <td>{comment.id}</td>
-                  <td>{comment.authorName}</td>
-                  <td>{comment.content}</td>
-                  <td>{comment.postId}</td>
-                  <td>
+                  <td data-cell="Id">{comment.id}</td>
+                  <td data-cell="Author name">{comment.authorName}</td>
+                  <td data-cell="Content">{comment.content}</td>
+                  <td data-cell="Post id">{comment.postId}</td>
+                  <td data-cell="Delete" className={styles.iconCell}>
                     <button
                       onClick={() => deleteComment(comment.id)}
                       className={styles.deleteBtn}
