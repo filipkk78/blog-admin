@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:5000/api/authorize", {
+      fetch("https://blog-api-production-3d1f.up.railway.app/api/authorize", {
         mode: "cors",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ function Home() {
     setError(false);
     const formData = { username, password };
     setPending(true);
-    fetch("http://localhost:5000/api/login", {
+    fetch("https://blog-api-production-3d1f.up.railway.app/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
