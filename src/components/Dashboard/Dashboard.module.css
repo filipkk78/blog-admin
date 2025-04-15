@@ -37,3 +37,19 @@ td {
 .publishBtn svg:active {
   stroke: rgb(7, 59, 6);
 }
+
+.published,
+.unpublished {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.published {
+  stroke: green;
+}
+
+.unpublished {
+  stroke: red;
+}

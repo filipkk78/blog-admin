@@ -2,7 +2,7 @@ import styles from "./Dashboard.module.css";
 import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
 import { Link } from "react-router-dom";
-import { Pencil } from "lucide-react";
+import { Pencil, Check, X } from "lucide-react";
 
 function Dashboard() {
   const [isTokenValid, setIsTokenValid] = useState(false);
@@ -86,7 +86,7 @@ function Dashboard() {
               <tr>
                 <th>Id</th>
                 <th>Title</th>
-                <th>Status</th>
+                <th>Published</th>
                 <th>Change status</th>
               </tr>
               {posts.map((post) => (
@@ -94,8 +94,8 @@ function Dashboard() {
                   <td>{post.id}</td>
                   <td>{post.title}</td>
                   <td>
-                    {post.published && "Published"}
-                    {!post.published && "Unpublished"}
+                    {post.published && <Check className={styles.published} />}
+                    {!post.published && <X className={styles.unpublished} />}
                   </td>
                   <td>
                     <button
