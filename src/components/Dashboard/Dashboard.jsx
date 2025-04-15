@@ -8,7 +8,7 @@ function Dashboard() {
   const [isTokenValid, setIsTokenValid] = useState(false);
   const [isTokenExpired, setIsTokenExpired] = useState(false);
   const [posts, setPosts] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState(null);
   const [title, setTitle] = useState("");
@@ -25,7 +25,7 @@ function Dashboard() {
         setIsTokenExpired(true);
         return;
       }
-      fetch("http://localhost:5000/api/authorize", {
+      fetch("https://blog-api-production-3d1f.up.railway.app/api/authorize", {
         mode: "cors",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ function Dashboard() {
     }
   }, [token]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/posts", {
+    fetch("https://blog-api-production-3d1f.up.railway.app/api/posts", {
       mode: "cors",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ function Dashboard() {
       .catch((error) => setError(error));
   }, [isTokenValid, token, posts]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/comments", {
+    fetch("https://blog-api-production-3d1f.up.railway.app/api/comments", {
       mode: "cors",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ function Dashboard() {
     );
   }
   function publishToggle(id) {
-    fetch(`http://localhost:5000/api/posts/${id}`, {
+    fetch(`https://blog-api-production-3d1f.up.railway.app/api/posts/${id}`, {
       mode: "cors",
       method: "PUT",
       headers: {
@@ -97,13 +97,16 @@ function Dashboard() {
   }
 
   function deleteComment(id) {
-    fetch(`http://localhost:5000/api/comments/${id}`, {
-      mode: "cors",
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    fetch(
+      `https://blog-api-production-3d1f.up.railway.app/api/comments/${id}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   function handleTitleChange(e) {
@@ -118,7 +121,7 @@ function Dashboard() {
     e.preventDefault();
     const post = { title, content, authorId: 1 };
     setPending(true);
-    fetch("http://localhost:5000/api/posts", {
+    fetch("https://blog-api-production-3d1f.up.railway.app/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,67 +140,79 @@ function Dashboard() {
       {!isTokenValid && <h1>Access denied</h1>}
       {isTokenValid && (
         <>
-          <h2>Posts</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Published</th>
-                <th>Change status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts.map((post) => (
-                <tr key={post.id} className={styles.post}>
-                  <td data-cell="Id">{post.id}</td>
-                  <td data-cell="Title">{post.title}</td>
-                  <td data-cell="Published" className={styles.iconCell}>
-                    {post.published && <Check className={styles.published} />}
-                    {!post.published && <X className={styles.unpublished} />}
-                  </td>
-                  <td data-cell="Change status" className={styles.iconCell}>
-                    <button
-                      className={styles.publishBtn}
-                      onClick={() => publishToggle(post.id)}
-                    >
-                      <Pencil></Pencil>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <h2>Comments</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Author</th>
-                <th>Content</th>
-                <th>Post id</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {comments.map((comment) => (
-                <tr key={comment.id} className={styles.post}>
-                  <td data-cell="Id">{comment.id}</td>
-                  <td data-cell="Author name">{comment.authorName}</td>
-                  <td data-cell="Content">{comment.content}</td>
-                  <td data-cell="Post id">{comment.postId}</td>
-                  <td data-cell="Delete" className={styles.iconCell}>
-                    <button
-                      onClick={() => deleteComment(comment.id)}
-                      className={styles.deleteBtn}
-                    >
-                      <Trash2></Trash2>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {posts && (
+            <>
+              <h2>Posts</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Published</th>
+                    <th>Change status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {posts.map((post) => (
+                    <tr key={post.id} className={styles.post}>
+                      <td data-cell="Id">{post.id}</td>
+                      <td data-cell="Title">{post.title}</td>
+                      <td data-cell="Published" className={styles.iconCell}>
+                        {post.published && (
+                          <Check className={styles.published} />
+                        )}
+                        {!post.published && (
+                          <X className={styles.unpublished} />
+                        )}
+                      </td>
+                      <td data-cell="Change status" className={styles.iconCell}>
+                        <button
+                          className={styles.publishBtn}
+                          onClick={() => publishToggle(post.id)}
+                        >
+                          <Pencil></Pencil>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+          {comments && (
+            <>
+              <h2>Comments</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Author</th>
+                    <th>Content</th>
+                    <th>Post id</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comments.map((comment) => (
+                    <tr key={comment.id} className={styles.post}>
+                      <td data-cell="Id">{comment.id}</td>
+                      <td data-cell="Author name">{comment.authorName}</td>
+                      <td data-cell="Content">{comment.content}</td>
+                      <td data-cell="Post id">{comment.postId}</td>
+                      <td data-cell="Delete" className={styles.iconCell}>
+                        <button
+                          onClick={() => deleteComment(comment.id)}
+                          className={styles.deleteBtn}
+                        >
+                          <Trash2></Trash2>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
           <h2>Add new post</h2>
           <form onSubmit={handlePostSubmit}>
             <label htmlFor="title">Title</label>
