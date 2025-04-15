@@ -1,9 +1,12 @@
 import styles from "./Dashboard.module.css";
 import { useEffect, useState } from "react";
 import Loading from "../Loading/Loading";
+import { Link } from "react-router-dom";
+import { Pencil } from "lucide-react";
 
 function Dashboard() {
-  const [isTokenValid, setIsTokenValid] = useState();
+  const [isTokenValid, setIsTokenValid] = useState(false);
+  const [isTokenExpired, setIsTokenExpired] = useState(false);
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,6 +14,13 @@ function Dashboard() {
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const isExpired = payload.exp * 1000 < Date.now();
+      if (isExpired) {
+        localStorage.removeItem("token");
+        setIsTokenExpired(true);
+        return;
+      }
       fetch("http://localhost:5000/api/authorize", {
         mode: "cors",
         headers: {
@@ -20,11 +30,10 @@ function Dashboard() {
         if (response.status >= 400) {
           throw new Error("Access denied");
         }
-        console.log("Access granted");
         setIsTokenValid(true);
       });
     }
-  }, []);
+  }, [token]);
   useEffect(() => {
     fetch("http://localhost:5000/api/posts", {
       mode: "cors",
@@ -41,9 +50,30 @@ function Dashboard() {
       .then((json) => setPosts(json.posts))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
-  }, [isTokenValid]);
+  }, [isTokenValid, token, posts]);
+  if (isTokenExpired)
+    return (
+      <div>
+        <h1>Token expired</h1> <Link to="/">Log back in to continue</Link>
+      </div>
+    );
   if (loading) return <Loading></Loading>;
-  if (error) return <h1>An error has occured fetching data from the API</h1>;
+  if (error)
+    return (
+      <div>
+        <h1>Access denied</h1> <Link to="/">Log in to continue</Link>
+      </div>
+    );
+
+  function publishToggle(id) {
+    fetch(`http://localhost:5000/api/posts/${id}`, {
+      mode: "cors",
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 
   return (
     <div>
@@ -51,11 +81,34 @@ function Dashboard() {
       {isTokenValid && (
         <>
           <h2>Posts</h2>
-          {posts.map((post) => (
-            <article key={post.id} className={styles.post}>
-              <h3>{post.title}</h3>
-            </article>
-          ))}
+          <table>
+            <tbody>
+              <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Change status</th>
+              </tr>
+              {posts.map((post) => (
+                <tr key={post.id} className={styles.post}>
+                  <td>{post.id}</td>
+                  <td>{post.title}</td>
+                  <td>
+                    {post.published && "Published"}
+                    {!post.published && "Unpublished"}
+                  </td>
+                  <td>
+                    <button
+                      className={styles.publishBtn}
+                      onClick={() => publishToggle(post.id)}
+                    >
+                      <Pencil></Pencil>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </>
       )}
     </div>
