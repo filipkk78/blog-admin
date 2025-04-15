@@ -82,6 +82,25 @@ tr:last-of-type {
   stroke: rgb(74, 14, 14);
 }
 
+form {
+  display: grid;
+  gap: 0.4em;
+}
+
+input,
+textarea,
+button[type="submit"] {
+  border: 3px solid rgb(56, 126, 211);
+  border-radius: 10px;
+  background-color: transparent;
+  padding: 0.4em;
+}
+
+textarea {
+  resize: none;
+  min-height: 20ch;
+}
+
 @media (max-width: 650px) {
   th {
     display: none;

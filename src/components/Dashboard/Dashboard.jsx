@@ -11,6 +11,9 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState(null);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [pending, setPending] = useState(false);
 
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -103,6 +106,32 @@ function Dashboard() {
     });
   }
 
+  function handleTitleChange(e) {
+    setTitle(e.target.value);
+  }
+
+  function handleContentChange(e) {
+    setContent(e.target.value);
+  }
+
+  function handlePostSubmit(e) {
+    e.preventDefault();
+    const post = { title, content, authorId: 1 };
+    setPending(true);
+    fetch("http://localhost:5000/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(post),
+    }).then(() => {
+      setPending(false);
+      setTitle("");
+      setContent("");
+    });
+  }
+
   return (
     <div>
       {!isTokenValid && <h1>Access denied</h1>}
@@ -169,6 +198,29 @@ function Dashboard() {
               ))}
             </tbody>
           </table>
+          <h2>Add new post</h2>
+          <form onSubmit={handlePostSubmit}>
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              value={title}
+              onChange={handleTitleChange}
+              required
+            />
+            <label htmlFor="content">Content</label>
+            <textarea
+              name="content"
+              id="content"
+              value={content}
+              onChange={handleContentChange}
+              required
+            ></textarea>
+
+            {!pending && <button type="submit">Submit</button>}
+            {pending && <button disabled>Pending...</button>}
+          </form>
         </>
       )}
     </div>
