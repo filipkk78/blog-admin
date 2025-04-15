@@ -110,13 +110,15 @@ function Dashboard() {
         <>
           <h2>Posts</h2>
           <table>
-            <tbody>
+            <thead>
               <tr>
                 <th>Id</th>
                 <th>Title</th>
                 <th>Published</th>
                 <th>Change status</th>
               </tr>
+            </thead>
+            <tbody>
               {posts.map((post) => (
                 <tr key={post.id} className={styles.post}>
                   <td>{post.id}</td>
@@ -139,14 +141,16 @@ function Dashboard() {
           </table>
           <h2>Comments</h2>
           <table>
-            <tbody>
+            <thead>
               <tr>
                 <th>Id</th>
                 <th>Author</th>
                 <th>Content</th>
-                <th>postId</th>
+                <th>Post id</th>
                 <th>Delete</th>
               </tr>
+            </thead>
+            <tbody>
               {comments.map((comment) => (
                 <tr key={comment.id} className={styles.post}>
                   <td>{comment.id}</td>

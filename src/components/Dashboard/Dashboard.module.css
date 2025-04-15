@@ -12,8 +12,25 @@ tr,
 th,
 td {
   border-collapse: collapse;
-  border: 2px solid white;
   padding: 0.5em;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgb(104, 141, 242);
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: rgb(44, 49, 74);
+}
+
+thead th {
+  background-color: rgb(56, 126, 211);
+  border: none;
+  text-align: left;
+  font-weight: bold;
+}
+tr:last-of-type {
+  border-bottom: 2px solid rgb(56, 126, 211);
 }
 
 .publishBtn,
